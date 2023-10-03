@@ -1,14 +1,17 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
-import FormularioInicial from './components/FormularioInicial'
+import { StyleSheet, SafeAreaView } from 'react-native';
+import React, { useRef, useState } from 'react';
+import Slider from './components/Slider';
 
 export default function App() {
+  const [index, setIndex] = useState(0);
+  const sliderRef = useRef(null);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
+    <SafeAreaView style={styles.container}>
+      <Slider ref={sliderRef} onIndexChanged={(newIndex) => setIndex(newIndex)} />
       <StatusBar style="auto" />
-      <FormularioInicial></FormularioInicial>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -16,7 +19,5 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });
