@@ -76,11 +76,13 @@ import {
     },
     image: {
       flex: 0.6,
-      width: '100%',
+      width: '85%',
     },
     content: {
       flex: 0.4,
       alignItems: 'center',
+      width: '100%',
+      height: '80%',
     },
     title: {
       fontSize: 24,
