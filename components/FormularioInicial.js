@@ -1,10 +1,20 @@
-import React, {Component} from "react";
+import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-export default function FormularioInicial() {
+const FormularioInicial = () => {
   return (
-    <View>
-      <Text>Texto Teste</Text>
+    <View style={styles.container}>
+      <Text>Esta é a página FormularioInicial</Text>
     </View>
   );
-}
+};
+
+export default FormularioInicial;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
