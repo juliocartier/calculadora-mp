@@ -2,7 +2,9 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Slider from './components/Slider';
-import FormularioInicial from './components/FormularioInicial';
+import MaquinaPoint from './components/MaquinaPoint';
+import MaquinaPointTap from './components/MaquinaPointTap';
+import ResultadoCalculo from './components/ResultadoCalculo';
 import { StatusBar } from 'expo-status-bar';
 
 const Stack = createStackNavigator();
@@ -19,10 +21,24 @@ export default function App() {
           }}
         />
         <Stack.Screen 
-          name="FormularioInicial" 
-          component={FormularioInicial} 
+          name="MaquinaPoint" 
+          component={MaquinaPoint} 
           options={{
             title: 'Formulário Inicial', // Título para a tela de FormularioInicial no header
+          }}
+        />
+        <Stack.Screen 
+          name="MaquinaPointTap" 
+          component={MaquinaPointTap} 
+          options={{
+            title: 'Maquina Point Tap', // Título para a tela de Maquina Point Tap no header
+          }}
+        />
+        <Stack.Screen 
+          name="ResultadoCalculo" 
+          component={ResultadoCalculo} 
+          options={{
+            title: 'Resultado de Calculos',
           }}
         />
       </Stack.Navigator>

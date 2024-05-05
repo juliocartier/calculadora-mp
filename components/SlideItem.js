@@ -14,8 +14,8 @@ import { useNavigation } from '@react-navigation/native';
 const { width, height } = Dimensions.get('screen');
 
 const idToActionMap = {
-  1: 'FormularioInicial',
-  2: 'Pagina2',
+  1: 'MaquinaPoint',
+  2: 'MaquinaPointTap',
 };
 
 const SlideItem = ({ item }) => {

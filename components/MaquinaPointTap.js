@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
-const FormularioInicial = () => {
+const MaquinaPointTap = () => {
   return (
     <View style={styles.container}>
       <Text>Esta é a página FormularioInicial</Text>
@@ -9,7 +9,7 @@ const FormularioInicial = () => {
   );
 };
 
-export default FormularioInicial;
+export default MaquinaPointTap;
 
 const styles = StyleSheet.create({
   container: {
