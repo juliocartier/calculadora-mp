@@ -24,14 +24,14 @@ export default function App() {
           name="MaquinaPoint" 
           component={MaquinaPoint} 
           options={{
-            title: 'Formulário Inicial', // Título para a tela de FormularioInicial no header
+            title: 'Maquineta Point', // Título para a tela de FormularioInicial no header
           }}
         />
         <Stack.Screen 
           name="MaquinaPointTap" 
           component={MaquinaPointTap} 
           options={{
-            title: 'Maquina Point Tap', // Título para a tela de Maquina Point Tap no header
+            title: 'Maquineta Point Tap', // Título para a tela de Maquina Point Tap no header
           }}
         />
         <Stack.Screen 
