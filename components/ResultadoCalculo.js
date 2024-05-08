@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, Modal, TouchableOpacity, StyleSheet } from 'react-native';
 
 const ResultadoCalculo = ({ route }) => {
-    const { valorTotal, valorInput, taxaSelecionada, taxaParcelaSelecionada, taxaPrazoSelecionado, formaPagamento } = route.params;
+    const { valorTotal, valorInput, taxaSelecionada, taxaParcelaSelecionada, taxaPrazoSelecionado, formaPagamento, parcelaLabel } = route.params;
 
     const [modalVisible, setModalVisible] = React.useState(false);
     const [valorReverso, setValorReverso] = React.useState(0);
@@ -10,12 +10,8 @@ const ResultadoCalculo = ({ route }) => {
     const calcularResultado = () => {
 
         console.log("Entrou aqui", valorTotal, valorInput, taxaSelecionada, taxaParcelaSelecionada, taxaPrazoSelecionado, formaPagamento);
-        // Lógica do cálculo aqui
-        const valor1 = 10;
-        const valor2 = 20;
-        const resultadoCalculado = valor1 + valor2;
 
-        const valorReverso = calcularReverso(valorInput, taxaSelecionada, taxaParcelaSelecionada, taxaPrazoSelecionado, formaPagamento)
+        const valorReverso = calcularReverso(valorInput, taxaSelecionada, taxaParcelaSelecionada, taxaPrazoSelecionado, formaPagamento);
         setValorReverso(valorReverso);
     
       };
@@ -40,6 +36,7 @@ const ResultadoCalculo = ({ route }) => {
                 <Text>Taxa da Parcela: {taxaParcelaSelecionada}</Text>
                 <Text>Taxa do Prazo: {taxaPrazoSelecionado}</Text>
                 <Text>Forma de Pagamento: {formaPagamento}</Text>
+                <Text>Quantidade de Parcelas: {parcelaLabel}</Text>
                 </>
             )}
             <Text>Valor com todas as taxas: {valorTotal}</Text>
@@ -71,6 +68,7 @@ const ResultadoCalculo = ({ route }) => {
                             <Text>Taxa da Parcela: {taxaParcelaSelecionada}</Text>
                             <Text>Taxa do Prazo: {taxaPrazoSelecionado}</Text>
                             <Text>Forma de Pagamento: {formaPagamento}</Text>
+                            <Text>Quantidade de Parcelas: {parcelaLabel}</Text>
                             </>
                         )}
                         <Text style={styles.modalText}>O valor que você deve cobrar é: {valorReverso}</Text>

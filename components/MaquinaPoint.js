@@ -13,10 +13,10 @@ const MaquinaPoint = () => {
   const [formaPagamento, setFormaPagamento] = React.useState('');
   const [tipoPagamento, setTipoPagamento] = React.useState('avista');
   const [parcelas, setParcelas] = React.useState('1');
-  const [taxa, setTaxa] = React.useState('0%'); // Estado para armazenar a taxa
   const [prazo, setPrazo] = React.useState('Agora'); // Estado para armazenar o prazo
   const [valorTotal, setValorTotal] = React.useState(0);
   const [valorNecessario, setValorNecessario] = React.useState(false)
+
 
   const [selectedId, setSelectedId] = React.useState();
   const formaPagamentoItems = [
@@ -58,7 +58,6 @@ const MaquinaPoint = () => {
   };
 
   const parcelasItems = [
-    { label: '1x', value: '1', taxa: '0' },
     { label: '2x', value: '2', taxa: '4.59' },
     { label: '3x', value: '3', taxa: '5.97' },
     { label: '4x', value: '4', taxa: '7.33' },
@@ -72,18 +71,50 @@ const MaquinaPoint = () => {
     { label: '12x', value: '12', taxa: '17.28' },
   ];
 
+  const prazoItemsDebito = [
+    { label: 'Agora', value: 'Agora', taxa: '1.99' },
+  ];
+
   const prazoItems = [
     { label: 'Agora', value: 'Agora', taxa: '5.31' },
     { label: '14 dias', value: '14', taxa: '4.36' },
     { label: '30 dias', value: '30', taxa: '3.60' }
   ];
 
+  const prazoItemsAVista = [
+    { label: 'Agora', value: 'Agora', taxa: '4.98' },
+    { label: '14 dias', value: '14', taxa: '3.79' },
+    { label: '30 dias', value: '30', taxa: '3.03' }
+  ];
+
+
   const handleFormaPagamentoSelecionada = (formaPagamentoId) => {
     const selectedItem = formaPagamentoItems.find(item => item.id === formaPagamentoId);
     setFormaPagamento(selectedItem.value);
     setSelectedId(selectedItem ? selectedItem.id : undefined);
-    console.log(formaPagamento)
 
+    if (selectedId === 1) {
+      setTipoPagamento('avista');
+    } else if (selectedId === 2) {
+      setTipoPagamento('avista');
+      setParcelas('1');
+    }
+
+  };
+
+  const getPrazoItems = () => {
+    let prazoItemsSelecionado = [];
+
+    const tipoPagamentoSelecionado = tipoPagamentoItems[formaPagamento].find(item => item.value === tipoPagamento);
+    if (selectedId === 1 && tipoPagamentoSelecionado) {
+      prazoItemsSelecionado = prazoItemsDebito;
+    } else if (selectedId === 2 && tipoPagamentoSelecionado.value === 'avista') {
+      prazoItemsSelecionado = prazoItemsAVista;
+    } else if (selectedId === 2 && tipoPagamentoSelecionado.value === 'parcelado') {
+      prazoItemsSelecionado = prazoItems;
+    }
+  
+    return prazoItemsSelecionado;
   };
 
   const handleCalcular = () => {
@@ -95,10 +126,11 @@ const MaquinaPoint = () => {
     let taxaSelecionada = '0';
     let taxaParcelaSelecionada = '0'; // Inicialize com uma taxa padrão para a parcela
     let taxaPrazoSelecionado = '0'; // Taxa do prazo selecionado
+    let parcelaLabel = '1x';
 
     const valorInput = parseFloat(valorInserido.replace(/\./g, '').replace(',', '.'));
 
-    console.log(parseFloat(typeof valorInserido))
+    // console.log(parseFloat(typeof valorInserido))
 
     if (tipoPagamento && tipoPagamentoItems[formaPagamento]) {
       const tipoPagamentoSelecionado = tipoPagamentoItems[formaPagamento].find(item => item.value === tipoPagamento);
@@ -111,34 +143,36 @@ const MaquinaPoint = () => {
       const parcelaSelecionada = parcelasItems.find(item => item.value === parcelas);
       if (parcelaSelecionada && parcelaSelecionada.taxa) {
         taxaParcelaSelecionada = parcelaSelecionada.taxa;
+        parcelaLabel = parcelaSelecionada.label
       }
     }
 
     // Obtém a taxa do prazo selecionado
-    if (prazo && prazoItems) {
-      const prazoSelecionado = prazoItems.find(item => item.value === prazo);
-      if (prazoSelecionado && prazoSelecionado.taxa) {
-        taxaPrazoSelecionado = prazoSelecionado.taxa;
+    if (prazo) {
+      if (selectedId === 2 && tipoPagamento === 'avista') {
+        const prazoSelecionado = prazoItemsAVista.find(item => item.value === prazo);
+        if (prazoSelecionado && prazoSelecionado.taxa) {
+          taxaPrazoSelecionado = prazoSelecionado.taxa;
+        }
+      } else if (selectedId === 2 && tipoPagamento === 'parcelado'){
+        const prazoSelecionado = prazoItems.find(item => item.value === prazo);
+        if (prazoSelecionado && prazoSelecionado.taxa) {
+          taxaPrazoSelecionado = prazoSelecionado.taxa;
+        }
+      } else if (selectedId === 1){
+        const prazoSelecionado = prazoItemsDebito.find(item => item.value === prazo);
+        if (prazoSelecionado && prazoSelecionado.taxa) {
+          taxaPrazoSelecionado = prazoSelecionado.taxa;
+        }
       }
     }
-
-
-    // Exibe no console os valores selecionados e as taxas correspondentes
-    // console.log("Valor Inserido", valorInput)
-    // console.log("Forma de pagamento selecionada:", formaPagamento);
-    // console.log("Tipo de pagamento selecionado:", tipoPagamento);
-    // console.log("Parcelas selecionadas:", parcelas);
-    // console.log("Prazo selecionado:", prazo);
-    // console.log("Taxa da forma de pagamento selecionada:", taxaSelecionada);
-    // console.log("Taxa da parcela selecionada:", taxaParcelaSelecionada);
-    // console.log("Taxa do prazo selecionado:", taxaPrazoSelecionado);
 
     const valorTotal = calcularValorTotal(valorInput, taxaSelecionada, taxaParcelaSelecionada, taxaPrazoSelecionado, formaPagamento);
     //Exibir valor decimal aredondado p/ 2 casas decimais.
     setValorTotal(valorTotal);
     setValorNecessario(false);
     // Exibindo o valor total no console
-    navigation.navigate('ResultadoCalculo', { valorTotal, valorInput, taxaSelecionada, taxaParcelaSelecionada, taxaPrazoSelecionado, formaPagamento });
+    navigation.navigate('ResultadoCalculo', { valorTotal, valorInput, taxaSelecionada, taxaParcelaSelecionada, taxaPrazoSelecionado, formaPagamento, parcelaLabel });
   };
 
 
@@ -175,7 +209,7 @@ const MaquinaPoint = () => {
                 onValueChange={(value) => setTipoPagamento(value)}
                 value={tipoPagamento}
                 items={tipoPagamentoItems[formaPagamento]}
-                placeholder={{ label: 'Selecione o tipo de pagamento', value: '' }}
+                placeholder={{ label: 'Selecione o tipo de Pagamento', value: '' }}
               />
             )}
           </View>
@@ -184,7 +218,7 @@ const MaquinaPoint = () => {
               <RNPickerSelect
                 onValueChange={(value) => setPrazo(value)}
                 value={prazo}
-                items={prazoItems}
+                items={getPrazoItems()}
                 placeholder={{ label: 'Selecione o prazo', value: '' }}
               />
             )}
