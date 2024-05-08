@@ -1,7 +1,7 @@
 export default [
     {
         id: 1,
-        img: require('../assets/point-landing.png'),
+        img: require('../assets/point-landing2.png'),
         title: 'Maquineta Point',
         description: 'Simule as taxas para vendas com a maquininha Point para compras a vista e a prazo.',
     },
