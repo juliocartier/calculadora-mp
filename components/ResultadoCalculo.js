@@ -8,126 +8,181 @@ const ResultadoCalculo = ({ route }) => {
     const [valorReverso, setValorReverso] = React.useState(0);
 
     const calcularResultado = () => {
-
-        console.log("Entrou aqui", valorTotal, valorInput, taxaSelecionada, taxaParcelaSelecionada, taxaPrazoSelecionado, formaPagamento);
-
         const valorReverso = calcularReverso(valorInput, taxaSelecionada, taxaParcelaSelecionada, taxaPrazoSelecionado, formaPagamento);
         setValorReverso(valorReverso);
-    
-      };
-    
+        setModalVisible(true);
+    };
+
     const calcularReverso = (valor, taxaSelecionada, taxaParcela, taxaPrazo, formaPagamento) => {
         let valorTotal = 0;
-        if (formaPagamento == 'debito') {
-          valorTotal = parseFloat(valor)/(1 - (parseFloat(taxaSelecionada) / 100));
-        } else if (formaPagamento == 'credito') {
-          valorTotal = parseFloat(valor)/(1 - ((parseFloat(taxaParcela) + parseFloat(taxaPrazo)) / 100));
+        if (formaPagamento === 'debito') {
+            valorTotal = parseFloat(valor) / (1 - (parseFloat(taxaSelecionada) / 100));
+        } else if (formaPagamento === 'credito') {
+            valorTotal = parseFloat(valor) / (1 - ((parseFloat(taxaParcela) + parseFloat(taxaPrazo)) / 100));
         }
         return valorTotal.toFixed(2);
-      };
-      
+    };
+
     return (
-        <View>
-            <Text>Valor Inserido: {valorInput}</Text>
+        <View style={styles.container}>
+            <Text style={styles.title}>Resultado do Cálculo</Text>
+            <Text style={styles.label}>Valor Inserido:</Text>
+            <Text style={styles.value}>{valorInput}</Text>
             {formaPagamento === 'debito' ? (
-                <Text>Taxa da Forma de Pagamento: {taxaSelecionada}</Text>
+                <>
+                    <Text style={styles.label}>Taxa da Forma de Pagamento:</Text>
+                    <Text style={styles.value}>{taxaSelecionada}</Text>
+                </>
             ) : (
                 <>
-                <Text>Taxa da Parcela: {taxaParcelaSelecionada}</Text>
-                <Text>Taxa do Prazo: {taxaPrazoSelecionado}</Text>
-                <Text>Forma de Pagamento: {formaPagamento}</Text>
-                <Text>Quantidade de Parcelas: {parcelaLabel}</Text>
+                    <Text style={styles.label}>Taxa da Parcela:</Text>
+                    <Text style={styles.value}>{taxaParcelaSelecionada}</Text>
+                    <Text style={styles.label}>Taxa do Prazo:</Text>
+                    <Text style={styles.value}>{taxaPrazoSelecionado}</Text>
+                    <Text style={styles.label}>Forma de Pagamento:</Text>
+                    <Text style={styles.value}>{formaPagamento}</Text>
+                    <Text style={styles.label}>Quantidade de Parcelas:</Text>
+                    <Text style={styles.value}>{parcelaLabel}</Text>
                 </>
             )}
-            <Text>Valor com todas as taxas: {valorTotal}</Text>
+            <Text style={styles.label}>Valor com todas as taxas:</Text>
+            <Text style={styles.value}>{valorTotal}</Text>
 
-            <View style={styles.container}>
-                <TouchableOpacity
-                    onPress={() => {
-                        calcularResultado(); // Chama a função de cálculo
-                        setModalVisible(true); // Abre o modal
-                        }} style={styles.button}>
-                    <Text style={styles.buttonText}>Quanto devo cobrar?</Text>
-                </TouchableOpacity>
-                
-                <Modal
-                    animationType="slide"
-                    transparent={true}
-                    visible={modalVisible}
-                    onRequestClose={() => {
+            <TouchableOpacity onPress={calcularResultado} style={styles.button}>
+                <Text style={styles.buttonText}>Quando devo cobrar</Text>
+            </TouchableOpacity>
+
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={modalVisible}
+                onRequestClose={() => {
                     setModalVisible(false);
-                    }}
-                >
-                    <View style={styles.centeredView}>
+                }}
+            >
+                <View style={styles.centeredView}>
                     <View style={styles.modalView}>
-                    <Text>Valor Inserido: {valorInput}</Text>
+                        <Text style={styles.modalTitle}>Resultado</Text>
+                        <Text style={styles.text}>Valor Inserido: {valorInput}</Text>
                         {formaPagamento === 'debito' ? (
-                            <Text>Taxa da Forma de Pagamento: {taxaSelecionada}</Text>
+                            <Text style={styles.text}>Taxa da Forma de Pagamento: {taxaSelecionada}</Text>
                         ) : (
                             <>
-                            <Text>Taxa da Parcela: {taxaParcelaSelecionada}</Text>
-                            <Text>Taxa do Prazo: {taxaPrazoSelecionado}</Text>
-                            <Text>Forma de Pagamento: {formaPagamento}</Text>
-                            <Text>Quantidade de Parcelas: {parcelaLabel}</Text>
+                                <Text style={styles.text}>Taxa da Parcela: {taxaParcelaSelecionada}</Text>
+                                <Text style={styles.text}>Taxa do Prazo: {taxaPrazoSelecionado}</Text>
+                                <Text style={styles.text}>Forma de Pagamento: {formaPagamento}</Text>
+                                <Text style={styles.text}>Quantidade de Parcelas: {parcelaLabel}</Text>
                             </>
                         )}
-                        <Text style={styles.modalText}>O valor que você deve cobrar é: {valorReverso}</Text>
+                        <Text style={styles.text}>O valor que você deve cobrar é: {valorReverso}</Text>
                         <TouchableOpacity
-                        style={{ ...styles.button, backgroundColor: '#2196F3' }}
-                        onPress={() => setModalVisible(false)}
+                            style={styles.closeButton}
+                            onPress={() => setModalVisible(false)}
                         >
-                        <Text style={styles.buttonText}>Fechar Modal</Text>
+                            <Text style={styles.closeButtonText}>X</Text>
                         </TouchableOpacity>
                     </View>
-                    </View>
-                </Modal>
-            </View>
+                </View>
+            </Modal>
         </View>
     );
-  };
+};
 
-  const styles = StyleSheet.create({
+const styles = StyleSheet.create({
     container: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
+        flex: 1,
+        padding: 20,
+        borderRadius: 10,
+        marginBottom: 20,
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+        elevation: 5,
+    },
+    title: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        color: '#333',
+        textAlign: 'center',
+    },
+    label: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        marginBottom: 5,
+        color: '#555',
+    },
+    value: {
+        fontSize: 16,
+        marginBottom: 15,
+        color: '#333',
     },
     button: {
-      backgroundColor: '#000',
-      borderRadius: 20,
-      padding: 10,
-      elevation: 2,
+        backgroundColor: '#000',
+        borderRadius: 20,
+        paddingVertical: 15,
+        marginTop: 20,
     },
     buttonText: {
-      color: 'white',
-      fontWeight: 'bold',
-      textAlign: 'center',
+        color: 'white',
+        fontWeight: 'bold',
+        textAlign: 'center',
     },
     centeredView: {
-      flex: 1,
-      justifyContent: 'center',
-      alignItems: 'center',
-      marginTop: 22,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 22,
     },
     modalView: {
-      margin: 20,
-      backgroundColor: 'white',
-      borderRadius: 20,
-      padding: 35,
+        margin: 20,
+        backgroundColor: 'white',
+        borderRadius: 20,
+        padding: 35,
+        alignItems: 'center',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5,
+    },
+    modalTitle: {
+        fontSize: 24,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        color: '#333',
+    },
+    text: {
+        fontSize: 16,
+        marginBottom: 10,
+        color: '#333',
+        textAlign: 'center',
+    },
+    closeButton: {
+      position: 'absolute',
+      top: 10,
+      right: 10,
+      backgroundColor: 'transparent',
+      width: 30,
+      height: 30,
+      justifyContent: 'center',
       alignItems: 'center',
-      shadowColor: '#000',
-      shadowOffset: {
-        width: 0,
-        height: 2,
-      },
-      shadowOpacity: 0.25,
-      shadowRadius: 4,
-      elevation: 5,
-    },
-    modalText: {
-      marginBottom: 15,
-      textAlign: 'center',
-    },
-  });
+      borderRadius: 15,
+      borderWidth: 1,
+      borderColor: '#aaa',
+  },
+  closeButtonText: {
+      color: '#aaa',
+      fontSize: 20,
+      fontWeight: 'bold',
+  },
+});
 
 export default ResultadoCalculo;
