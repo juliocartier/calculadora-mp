@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   Image,
   StyleSheet,
@@ -8,19 +8,19 @@ import {
   Animated,
   Easing,
   TouchableOpacity,
+  Modal,
+  ScrollView,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
-const { width, height } = Dimensions.get('screen');
+import { objetoEstaNaLista, modelosMaquineta, slides, direitos } from '../helpers';
 
-const idToActionMap = {
-  1: 'MaquinaPoint',
-  2: 'MaquinaPointTap',
-};
+const { width, height } = Dimensions.get('screen');
 
 const SlideItem = ({ item }) => {
   const translateYImage = new Animated.Value(40);
   const navigation = useNavigation();
+  const [modalVisible, setModalVisible] = useState(false);
 
   Animated.timing(translateYImage, {
     toValue: 0,
@@ -29,13 +29,21 @@ const SlideItem = ({ item }) => {
     easing: Easing.bounce,
   }).start();
 
-  const handlePress = () => {
-    const action = idToActionMap[item.id];
-    if (action) {
-      navigation.navigate(action);
+  const handlePress = (slideItem) => {
+    if (objetoEstaNaLista(slides, slideItem)) {
+      console.log('render', slideItem.render);
+      navigation.navigate(slideItem.render, { slideItem });
     } else {
       console.log('Error: ID not found');
     }
+  };
+
+  const handleSaibaMais = () => {
+    setModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setModalVisible(false);
   };
 
   return (
@@ -58,10 +66,34 @@ const SlideItem = ({ item }) => {
       <View style={styles.content}>
         <Text style={styles.title}>{item.title}</Text>
         <Text style={styles.description}>{item.description}</Text>
-        <TouchableOpacity style={styles.button} onPress={handlePress}>
+        <TouchableOpacity style={styles.button} onPress={() => handlePress(item)}>
           <Text style={styles.buttonLabel}>Calcular</Text>
         </TouchableOpacity>
+        <View style={styles.viewAvisoDireitos}>
+          <Text style={styles.tituloAviso}>
+            Este aplicativo não possui vínculo com as empresas de maquinetas de crédito.
+            {'\n'}
+            <Text style={styles.saibaMais} onPress={handleSaibaMais}>
+              Saiba mais
+            </Text>
+          </Text>
+        </View>
       </View>
+
+      <Modal animationType="fade" transparent={true} visible={modalVisible} onRequestClose={handleCloseModal}>
+        <View style={styles.modalOverlay}>
+          <View style={styles.modalContent}>
+            <ScrollView>
+              <Text style={styles.modalTitulo}>Aviso{'\n'}{'\n'}</Text>
+              <Text style={styles.modalTexto}>{direitos}</Text>
+
+            </ScrollView>
+            <TouchableOpacity style={styles.botaoFechar} onPress={handleCloseModal}>
+              <Text style={styles.botaoFecharTexto}>Fechar</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -94,8 +126,8 @@ const styles = StyleSheet.create({
     marginVertical: 12,
     color: '#333',
     textAlign: 'center',
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingLeft: 15,
+    paddingRight: 15,
   },
   button: {
     backgroundColor: '#000',
@@ -105,6 +137,57 @@ const styles = StyleSheet.create({
     marginVertical: 16,
   },
   buttonLabel: {
+    color: '#fff',
+    fontSize: 16,
+  },
+  viewAvisoDireitos: {
+    alignItems: 'center',
+    textAlign: 'center',
+    paddingLeft: 45,
+    paddingRight: 45,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  tituloAviso: {
+    fontSize: 13,
+    color: '#404040',
+    textAlign: 'center',
+  },
+  saibaMais: {
+    textDecorationLine: 'underline',
+    fontSize: 12,
+    color: '#202020',
+  },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    padding: 20,
+    width: '80%',
+    maxHeight: '80%',
+  },
+  modalTexto: {
+    fontSize: 16,
+    marginBottom: 20,
+  },
+  modalTitulo: {
+    fontSize: 18,
+    fontWeight: 'bold'
+  },
+  botaoFechar: {
+    backgroundColor: '#3CB2E5',
+    borderRadius: 10,
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    alignSelf: 'flex-end',
+  },
+  botaoFecharTexto: {
     color: '#fff',
     fontSize: 16,
   },

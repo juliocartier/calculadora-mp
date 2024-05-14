@@ -4,10 +4,13 @@ import RNPickerSelect from "react-native-picker-select";
 
 import { useNavigation } from '@react-navigation/native';
 import RadioGroup from 'react-native-radio-buttons-group';
+import * as helperVars from '../helpers'
 
-const MaquinaPoint = () => {
-
+const MaquinaPoint = ({route}) => {
+  const { slideItem } = route.params;
+  
   const navigation = useNavigation();
+  let parcelasItems, prazoItems, prazoItemsAVista, prazoItemsDebito, tipoPagamentoItems;
 
   const [valorInserido, setValorInserido] = React.useState('0,00');
   const [formaPagamento, setFormaPagamento] = React.useState('');
@@ -17,6 +20,20 @@ const MaquinaPoint = () => {
   const [valorTotal, setValorTotal] = React.useState(0);
   const [valorNecessario, setValorNecessario] = React.useState(false)
 
+  if (slideItem.id == 1) {
+    parcelasItems = helperVars.parcelasItemsPoint;
+    prazoItems = helperVars.prazoItemsPoint;
+    prazoItemsAVista = helperVars.prazoItemsAVistaPoint;
+    prazoItemsDebito = helperVars.prazoItemsDebitoPoint;
+    tipoPagamentoItems = helperVars.tipoPagamentoItemsPoint;
+
+  } else if (slideItem.id == 2) {
+    parcelasItems = helperVars.parcelasItemsPointTap;
+    prazoItems = helperVars.prazoItemsPointTap;
+    prazoItemsAVista = helperVars.prazoItemsAVistaPointTap;
+    prazoItemsDebito = helperVars.prazoItemsDebitoPointTap;
+    tipoPagamentoItems = helperVars.tipoPagamentoItemsPointTap;
+  } 
 
   const [selectedId, setSelectedId] = React.useState();
   const formaPagamentoItems = [
@@ -24,6 +41,7 @@ const MaquinaPoint = () => {
     { id: 1, label: 'Débito', value: 'debito', color: '#3CB2E5' },
     { id: 2, label: 'Crédito', value: 'credito', color: '#3CB2E5' }
   ];
+
 
   const handleValorChange = (text) => {
     // Remova todos os caracteres não numéricos do texto
@@ -35,10 +53,8 @@ const MaquinaPoint = () => {
       return;
     }
 
-    // Converta o valor formatado para um número
     let amount = parseFloat(formattedValue) / 100;
 
-    // Formate o valor como uma string
     const formattedAmount = amount.toLocaleString('pt-BR', {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
@@ -47,49 +63,10 @@ const MaquinaPoint = () => {
     // Atualize o estado com o valor formatado
     setValorInserido(formattedAmount);
   };
-  const tipoPagamentoItems = {
-    debito: [
-      { label: 'À vista', value: 'avista', taxa: '1.99' }
-    ],
-    credito: [
-      { label: 'À vista', value: 'avista', taxa: '2' },
-      { label: 'Parcelado', value: 'parcelado', taxa: '3' }
-    ]
-  };
-
-  const parcelasItems = [
-    { label: '2x', value: '2', taxa: '4.59' },
-    { label: '3x', value: '3', taxa: '5.97' },
-    { label: '4x', value: '4', taxa: '7.33' },
-    { label: '5x', value: '5', taxa: '8.66' },
-    { label: '6x', value: '6', taxa: '9.96' },
-    { label: '7x', value: '7', taxa: '11.24' },
-    { label: '8x', value: '8', taxa: '12.50' },
-    { label: '9x', value: '9', taxa: '13.73' },
-    { label: '10x', value: '10', taxa: '14.93' },
-    { label: '11x', value: '11', taxa: '16.12' },
-    { label: '12x', value: '12', taxa: '17.28' },
-  ];
-
-  const prazoItemsDebito = [
-    { label: 'Agora', value: 'Agora', taxa: '1.99' },
-  ];
-
-  const prazoItems = [
-    { label: 'Agora', value: 'Agora', taxa: '5.31' },
-    { label: '14 dias', value: '14', taxa: '4.36' },
-    { label: '30 dias', value: '30', taxa: '3.60' }
-  ];
-
-  const prazoItemsAVista = [
-    { label: 'Agora', value: 'Agora', taxa: '4.98' },
-    { label: '14 dias', value: '14', taxa: '3.79' },
-    { label: '30 dias', value: '30', taxa: '3.03' }
-  ];
-
 
   const handleFormaPagamentoSelecionada = (formaPagamentoId) => {
     const selectedItem = formaPagamentoItems.find(item => item.id === formaPagamentoId);
+    console.log(selectedItem)
     setFormaPagamento(selectedItem.value);
     setSelectedId(selectedItem ? selectedItem.id : undefined);
 
@@ -190,6 +167,7 @@ const MaquinaPoint = () => {
 
   return (
     <View style={styles.container}>
+      <Text style={styles.tituloMaquineta}>{slideItem.title}</Text>
       <View>
         <View >
           <View style={styles.viewOpcoes}>
@@ -274,6 +252,17 @@ const styles = StyleSheet.create({
     fontSize: 16,
     paddingLeft: 30,
   },
+  tituloMaquineta: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    width: '100%',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    fontSize: 20,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
   container: {
     flex: 1,
     justifyContent: 'center',
@@ -329,7 +318,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingLeft: 15,
-    paddingBottom: 10
+    paddingTop: 5
   }
 
 });

@@ -1,6 +1,6 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Animated, FlatList, StyleSheet, Text, View } from 'react-native';
-import Slides from '../data';
+import { slides } from '../helpers';
 import SlideItem from './SlideItem';
 import Pagination from './Pagination';
 
@@ -37,7 +37,7 @@ const Slider = ({ onIndexChanged }, ref) => {
   }).current;
 
   const goForward = () => {
-    if (index < Slides.length - 1) {
+    if (index < slides.length - 1) {
       setIndex(index + 1);
     }
   };
@@ -58,7 +58,7 @@ const Slider = ({ onIndexChanged }, ref) => {
     <View style={styles.container}>
       <View style={styles.sliderContainer}>
         <FlatList
-          data={Slides}
+          data={slides}
           renderItem={({ item }) => <SlideItem item={item} />}
           horizontal
           pagingEnabled
@@ -69,7 +69,7 @@ const Slider = ({ onIndexChanged }, ref) => {
           viewabilityConfig={viewabilityConfig}
         />
       </View>
-      <Pagination data={Slides} scrollX={scrollX} index={index} />
+      <Pagination data={slides} scrollX={scrollX} index={index} />
     </View>
   );
 };

@@ -124,8 +124,10 @@ const styles = StyleSheet.create({
     button: {
         backgroundColor: '#000',
         borderRadius: 20,
-        paddingVertical: 15,
+        paddingVertical: 8,
         marginTop: 20,
+        borderRadius: 8,
+        paddingHorizontal: 8,
     },
     buttonText: {
         color: 'white',
@@ -166,23 +168,23 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     closeButton: {
-      position: 'absolute',
-      top: 10,
-      right: 10,
-      backgroundColor: 'transparent',
-      width: 30,
-      height: 30,
-      justifyContent: 'center',
-      alignItems: 'center',
-      borderRadius: 15,
-      borderWidth: 1,
-      borderColor: '#aaa',
-  },
-  closeButtonText: {
-      color: '#aaa',
-      fontSize: 20,
-      fontWeight: 'bold',
-  },
+        position: 'absolute',
+        top: 10,
+        right: 10,
+        backgroundColor: 'transparent',
+        width: 30,
+        height: 30,
+        justifyContent: 'center',
+        alignItems: 'center',
+        borderRadius: 15,
+        borderWidth: 1,
+        borderColor: '#aaa',
+    },
+    closeButtonText: {
+        color: '#aaa',
+        fontSize: 20,
+        fontWeight: 'bold',
+    },
 });
 
 export default ResultadoCalculo;
